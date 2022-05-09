@@ -9,7 +9,7 @@ namespace Triangulare_cu_diagonale
     public partial class Form1 : Form
     {
         Graphics g;
-        Pen pen = new Pen(Color.RoyalBlue,3);
+        Pen pen = new Pen(Color.RoyalBlue, 3);
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
         List<PointF> p = new List<PointF>(); //lista varfurilor
@@ -22,10 +22,11 @@ namespace Triangulare_cu_diagonale
         //desenare poligon
         private void Form1_Click(object sender, EventArgs e)
         {
+            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
             g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
-            g.DrawString((n + 1).ToString(), new Font(FontFamily.GenericSansSerif, 10),
-            new SolidBrush(Color.Navy), p[n].X + raza, p[n].Y - raza);
+            g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
+            new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
             if (n > 0)
                 g.DrawLine(pen, p[n - 1], p[n]);
             n++;
@@ -38,30 +39,30 @@ namespace Triangulare_cu_diagonale
             g.DrawLine(pen, p[n - 1], p[0]);
             poligon_inchis = true;
         }
-        //determina valoarea determinantului de ordin 3 cu coordonatele punctelor date si 1 p ultima coloana
-        private double Sarrus(PointF p1, PointF p2, PointF p3)
+        //determina valoarea determinantului
+        private double determinant(PointF p1, PointF p2, PointF p3)
         {
             return p1.X * p2.Y + p2.X * p3.Y + p3.X * p1.Y - p3.X * p2.Y - p2.X * p1.Y - p1.X * p3.Y;
         }
         private bool intoarcere_spre_stanga(int p1, int p2, int p3)
         {
-            if (Sarrus(p[p1], p[p2], p[p3]) < 0)
+            if (determinant(p[p1], p[p2], p[p3]) < 0)
                 return true;
             return false;
         }
         private bool intoarcere_spre_dreapta(int p1, int p2, int p3)
         {
-            if (Sarrus(p[p1], p[p2], p[p3]) > 0)
+            if (determinant(p[p1], p[p2], p[p3]) > 0)
                 return true;
             return false;
         }
-        private bool este_varf_convex(int p)
+        private bool varf_convex(int p)
         {
             int p_ant = (p > 0) ? p - 1 : n - 1;
             int p_urm = (p < n - 1) ? p + 1 : 0;
             return intoarcere_spre_dreapta(p_ant, p, p_urm);
         }
-        private bool este_varf_reflex(int p)
+        private bool varf_reflex(int p)
         {
             int p_ant = (p > 0) ? p - 1 : n - 1;
             int p_urm = (p < n - 1) ? p + 1 : 0;
@@ -70,7 +71,7 @@ namespace Triangulare_cu_diagonale
         //verifica daca doua segmente se intersecteaza
         private bool se_intersecteaza(PointF s1, PointF s2, PointF p1, PointF p2)
         {
-            if (Sarrus(p2, p1, s1) * Sarrus(p2, p1, s2) <= 0 && Sarrus(s2, s1, p1) * Sarrus(s2, s1, p2) <= 0)
+            if (determinant(p2, p1, s1) * determinant(p2, p1, s2) <= 0 && determinant(s2, s1, p1) * determinant(s2, s1, p2) <= 0)
                 return true;
             return false;
         }
@@ -79,8 +80,8 @@ namespace Triangulare_cu_diagonale
         {
             int pi_ant = (pi > 0) ? pi - 1 : n - 1;
             int pi_urm = (pi < n - 1) ? pi + 1 : 0;
-            if ((este_varf_convex(pi) && intoarcere_spre_stanga(pi, pj, pi_urm) && intoarcere_spre_stanga(pi, pi_ant, pj)) ||
-            (este_varf_reflex(pi) && !(intoarcere_spre_dreapta(pi, pj, pi_urm) && intoarcere_spre_dreapta(pi, pi_ant, pj))))
+            if ((varf_convex(pi) && intoarcere_spre_stanga(pi, pj, pi_urm) && intoarcere_spre_stanga(pi, pi_ant, pj)) ||
+            (varf_reflex(pi) && !(intoarcere_spre_dreapta(pi, pj, pi_urm) && intoarcere_spre_dreapta(pi, pi_ant, pj))))
                 return true;
             return false;
         }
@@ -95,9 +96,7 @@ namespace Triangulare_cu_diagonale
             int nr_diagonale = 0;
             Tuple<int, int>[] diagonale = new Tuple<int, int>[n - 3];
 
-            pen = new Pen(Color.Red,3);
-            float[] dashValues = { 1, 2, 3, 4 };
-            pen.DashPattern = dashValues;
+            pen = new Pen(Color.MediumVioletRed, 3);
             for (int i = 0; i < n - 2; i++)
                 for (int j = i + 2; j < n; j++)
                 {

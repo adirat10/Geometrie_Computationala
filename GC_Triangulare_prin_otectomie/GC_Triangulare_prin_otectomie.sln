@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GC_Triangulare_prin_otectomie", "GC_Triangulare_prin_otectomie.csproj", "{FD894F8B-3962-4A42-BE92-242D6CF28295}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD894F8B-3962-4A42-BE92-242D6CF28295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD894F8B-3962-4A42-BE92-242D6CF28295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD894F8B-3962-4A42-BE92-242D6CF28295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD894F8B-3962-4A42-BE92-242D6CF28295}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB2C0E44-A0DF-4132-A28F-044021E35748}
+	EndGlobalSection
+EndGlobal
