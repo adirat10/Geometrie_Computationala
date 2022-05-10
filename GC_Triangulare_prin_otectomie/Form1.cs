@@ -86,6 +86,8 @@ namespace GC_Triangulare_prin_otectomie
             return false;
         }
         //triangularea poligonului folosind diagonalele
+
+        double aria_poligon = 0;
         private void button2_Click(object sender, EventArgs e)
         {
             if (n <= 3)
@@ -103,6 +105,8 @@ namespace GC_Triangulare_prin_otectomie
                     {
                         if (isdiagonala(p[i], p[0]))
                         {
+                            double aria_triunghi = Aria(p[i], p[i + 1], p[0]);
+                            aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[0]);
                             Thread.Sleep(100);
                             p.Remove(p[i + 1]);
@@ -114,6 +118,8 @@ namespace GC_Triangulare_prin_otectomie
                     {
                         if (isdiagonala(p[i], p[1]))
                         {
+                            double aria_triunghi = Aria(p[i], p[0], p[1]);
+                            aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[1]);
                             Thread.Sleep(100);
                             p.Remove(p[0]);
@@ -125,6 +131,8 @@ namespace GC_Triangulare_prin_otectomie
                     {
                         if (isdiagonala(p[i], p[i + 2]))
                         {
+                            double aria_triunghi = Aria(p[i], p[i + 1], p[i + 2]);
+                            aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[i + 2]);
                             Thread.Sleep(100);
                             p.Remove(p[i + 1]);
@@ -134,6 +142,12 @@ namespace GC_Triangulare_prin_otectomie
                     }
                 }
             }
+            label3.Text = Convert.ToString(aria_poligon);
+        }
+
+        private double Aria(PointF p1, PointF p2, PointF p3)
+        {
+            return (double)Math.Abs(0.5 * determinant(p1, p2, p3));
         }
 
         private bool isdiagonala(PointF p1, PointF p2)
