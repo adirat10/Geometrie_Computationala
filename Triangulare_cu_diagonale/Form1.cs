@@ -24,12 +24,15 @@ namespace Triangulare_cu_diagonale
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
-            g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
-            g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
-            new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
-            if (n > 0)
-                g.DrawLine(pen, p[n - 1], p[n]);
-            n++;
+            if (!poligon_inchis)
+            {
+                g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
+                g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
+                new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
+                if (n > 0)
+                    g.DrawLine(pen, p[n - 1], p[n]);
+                n++;
+            }
         }
         //inchiderea poligonul
         private void button1_Click(object sender, EventArgs e)
@@ -86,7 +89,6 @@ namespace Triangulare_cu_diagonale
             return false;
         }
         //triangularea poligonului folosind diagonalele
-        int nr_diagonale = 0;
         private void button2_Click(object sender, EventArgs e)
         {
             if (n <= 3)
@@ -94,7 +96,7 @@ namespace Triangulare_cu_diagonale
             if (!poligon_inchis)
                 button1_Click(sender, e); //inchide poligonul
 
-            //int nr_diagonale = 0;
+            int nr_diagonale = 0;
             Tuple<int, int>[] diagonale = new Tuple<int, int>[n - 3];
 
             pen = new Pen(Color.MediumVioletRed, 3);
