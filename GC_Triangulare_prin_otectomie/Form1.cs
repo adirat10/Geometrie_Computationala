@@ -14,6 +14,7 @@ namespace GC_Triangulare_prin_otectomie
         int n = 0; // nr de varfuri ale poligonului
         List<PointF> p = new List<PointF>(); //lista varfurilor
         bool poligon_inchis = false;
+        bool ok = true;
         public Form1()
         {
             InitializeComponent();
@@ -24,12 +25,15 @@ namespace GC_Triangulare_prin_otectomie
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
-            g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
-            g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
-            new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
-            if (n > 0)
-                g.DrawLine(pen, p[n - 1], p[n]);
-            n++;
+            if (ok)
+            {
+                g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
+                g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
+                new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
+                if (n > 0)
+                    g.DrawLine(pen, p[n - 1], p[n]);
+                n++;
+            }
         }
         //inchiderea poligonul
         private void button1_Click(object sender, EventArgs e)
@@ -38,6 +42,7 @@ namespace GC_Triangulare_prin_otectomie
                 return;
             g.DrawLine(pen, p[n - 1], p[0]);
             poligon_inchis = true;
+            ok = false;
         }
         //determina valoarea determinantului
         private double determinant(PointF p1, PointF p2, PointF p3)
@@ -85,7 +90,7 @@ namespace GC_Triangulare_prin_otectomie
                 return true;
             return false;
         }
-        //triangularea poligonului folosind diagonalele
+        //triangularea poligonului prin otectomie
 
         double aria_poligon = 0;
         private void button2_Click(object sender, EventArgs e)
@@ -103,7 +108,7 @@ namespace GC_Triangulare_prin_otectomie
                 {
                     if (i == n - 2)
                     {
-                        if (isdiagonala(p[i], p[0]))
+                        if (isdiagonala(i, 0))
                         {
                             double aria_triunghi = Aria(p[i], p[i + 1], p[0]);
                             aria_poligon += aria_triunghi;
@@ -116,7 +121,7 @@ namespace GC_Triangulare_prin_otectomie
                     }
                     else if (i == n - 1)
                     {
-                        if (isdiagonala(p[i], p[1]))
+                        if (isdiagonala(i, 1))
                         {
                             double aria_triunghi = Aria(p[i], p[0], p[1]);
                             aria_poligon += aria_triunghi;
@@ -129,7 +134,7 @@ namespace GC_Triangulare_prin_otectomie
                     }
                     else
                     {
-                        if (isdiagonala(p[i], p[i + 2]))
+                        if (isdiagonala(i, i + 2))
                         {
                             double aria_triunghi = Aria(p[i], p[i + 1], p[i + 2]);
                             aria_poligon += aria_triunghi;
@@ -147,64 +152,40 @@ namespace GC_Triangulare_prin_otectomie
 
         private double Aria(PointF p1, PointF p2, PointF p3)
         {
-            return (double)Math.Abs(0.5 * determinant(p1, p2, p3));
+            return (double)Math.Abs(0.5F * determinant(p1, p2, p3));
         }
-
-        private bool isdiagonala(PointF p1, PointF p2)
+        private bool isdiagonala(int i, int j)
         {
             int nr_diagonale = 0;
             Tuple<int, int>[] diagonale = new Tuple<int, int>[n - 3];
-            bool ok = false;
-            for (int i = 0; i < n - 2; i++)
+            bool intersectie = false;
+
+            //daca p1p2 nu intersecteaza nicio latura neincidenta a poligonului
+            for (int k = 0; k < n - 1; k++)
             {
-                for (int j = i + 2; j < n; j++)
+                if (i != k && i != (k + 1) && j != k && j != (k + 1) && se_intersecteaza(p[i], p[j], p[k], p[k + 1]))
+
                 {
-                    if (i == 0 && j == n - 1)
-                        break; // exclud ultima latura
-                    bool intersectie = false;
-                    //daca p_i p_j nu intersecteaza nicio latura neincidenta a poligonului
-                    for (int k = 0; k < n - 1; k++)
-                        if (i != k && i != (k + 1) && j != k && j != (k + 1) && se_intersecteaza(p1, p2, p[k], p[k + 1]))
-                        {
-                            intersectie = true;
-                            break;
-                        }
-                    //verif si pt ultima latura a poligonului
-                    if (i != n - 1 && i != 0 && j != n - 1 && j != 0 && se_intersecteaza(p1, p2, p[n - 1], p[0]))
-                    {
-                        intersectie = true;
-                    }
-                    if (!intersectie)
-                    {
-                        //si daca p_i p_j nu intersecteaza niciuna din diagonalele alese anterior
-                        for (int k = 0; k < nr_diagonale; k++)
-                            if (i != diagonale[k].Item1 && i != diagonale[k].Item2 &&
-                            j != diagonale[k].Item1 && j != diagonale[k].Item2 &&
-                           se_intersecteaza(p1, p2, p[diagonale[k].Item1], p[diagonale[k].Item2]))
-                            {
-                                intersectie = true;
-                                break;
-                            }
-                        if (!intersectie)
-                        {
-                            //si daca p_i p_j se afla in interiorul poligonului
-                            if (se_afla_in_interiorul_poligonului(i, j))
-                            {
-                                //se retine diagonala p_i p_j
-                                //Thread.Sleep(100);
-                                //g.DrawLine(pen, p[i], p[j]);
-                                diagonale[nr_diagonale] = new Tuple<int, int>(i, j);
-                                nr_diagonale++;
-                                ok = true;
-                            }
-                        }
-                    }
-                    if (nr_diagonale == n - 3)
-                        break;
+                    intersectie = true;
+                    break;
                 }
             }
-            if (ok)
-                return true;
+            //verific si pt ultima latura a poligonului
+            if (i != n - 1 && i != 0 && j != n - 1 && j != 0 && se_intersecteaza(p[i], p[j], p[n - 1], p[0]))
+            {
+                intersectie = true;
+            }
+            if (!intersectie)
+            {
+                //si daca p1,p2 se afla in interiorul poligonului
+                if (se_afla_in_interiorul_poligonului(i, j))
+                {
+                    //se retine diagonala p1p2
+                    diagonale[nr_diagonale] = new Tuple<int, int>(i, j);
+                    nr_diagonale++;
+                    return true;
+                }
+            }
             return false;
         }
         private void button3_Click(object sender, EventArgs e)

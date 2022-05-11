@@ -86,6 +86,7 @@ namespace Triangulare_cu_diagonale
             return false;
         }
         //triangularea poligonului folosind diagonalele
+        int nr_diagonale = 0;
         private void button2_Click(object sender, EventArgs e)
         {
             if (n <= 3)
@@ -93,7 +94,7 @@ namespace Triangulare_cu_diagonale
             if (!poligon_inchis)
                 button1_Click(sender, e); //inchide poligonul
 
-            int nr_diagonale = 0;
+            //int nr_diagonale = 0;
             Tuple<int, int>[] diagonale = new Tuple<int, int>[n - 3];
 
             pen = new Pen(Color.MediumVioletRed, 3);
