@@ -12,9 +12,15 @@ namespace GC_Triangulare_prin_otectomie
         Pen pen = new Pen(Color.RoyalBlue, 3);
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
+        int cn;
         List<PointF> p = new List<PointF>(); //lista varfurilor
+        List<PointF> treicolorare = new List<PointF>();
         bool poligon_inchis = false;
         bool ok = true;
+
+        Pen r = new Pen(Color.Red, 4);
+        Pen gr = new Pen(Color.Green, 4);
+        Pen b = new Pen(Color.Blue, 4);
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +31,7 @@ namespace GC_Triangulare_prin_otectomie
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
+            treicolorare = p;
             if (ok)
             {
                 g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
@@ -34,6 +41,7 @@ namespace GC_Triangulare_prin_otectomie
                     g.DrawLine(pen, p[n - 1], p[n]);
                 n++;
             }
+            cn = n;
         }
         //inchiderea poligonul
         private void button1_Click(object sender, EventArgs e)
@@ -191,6 +199,42 @@ namespace GC_Triangulare_prin_otectomie
         private void button3_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Tuple<int, int>[] colorare = new Tuple<int, int>[cn];
+            // 0 - NULL
+            // 1 - red
+            // 2 - green
+            // 3 - blue
+
+            for (int i = 0; i < cn; i++)
+            {
+                colorare[i] = new Tuple<int, int>(i, 0);
+            }
+
+            colorare[cn - 1] = new Tuple<int, int>(cn - 1, 1);
+            g.DrawEllipse(r, treicolorare[cn - 1].X, treicolorare[cn - 1].Y, 20, 20);
+            colorare[cn - 2] = new Tuple<int, int>(cn - 2, 2);
+            g.DrawEllipse(gr, treicolorare[cn - 2].X, treicolorare[cn - 2].Y, 20, 20);
+            colorare[cn - 3] = new Tuple<int, int>(cn - 3, 3);
+            g.DrawEllipse(b, treicolorare[cn - 3].X, treicolorare[cn - 3].Y, 20, 20);
+
+            for (int i = cn - 4; i >= 0; i--)
+            {
+                if (colorare[i].Item2 == 0)
+                {
+                    colorare[i] = new Tuple<int, int>(i, 6 - colorare[i + 1].Item2 - colorare[i + 2].Item2);
+                    if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 1)
+                        g.DrawEllipse(r, treicolorare[i].X, treicolorare[i].Y, 20, 20);
+                    else if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 2)
+                        g.DrawEllipse(gr, treicolorare[i].X, treicolorare[i].Y, 20, 20);
+                    else if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 3)
+                        g.DrawEllipse(b, treicolorare[i].X, treicolorare[i].Y, 20, 20);
+                }
+            }
         }
     }
 }
