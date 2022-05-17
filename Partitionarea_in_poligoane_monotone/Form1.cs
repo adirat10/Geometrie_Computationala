@@ -17,6 +17,7 @@ namespace Partitionarea_in_poligoane_monotone
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
         List<PointF> p = new List<PointF>(); //lista varfurilor
+        List<PointF> cp = new List<PointF>();
         bool ok = true;
         public Form1()
         {
@@ -37,6 +38,22 @@ namespace Partitionarea_in_poligoane_monotone
                 n++;
             }
         }
+        private double determinant(PointF p1, PointF p2, PointF p3)
+        {
+            return p1.X * p2.Y + p2.X * p3.Y + p3.X * p1.Y - p3.X * p2.Y - p2.X * p1.Y - p1.X * p3.Y;
+        }
+        private bool intoarcere_spre_stanga(int p1, int p2, int p3)
+        {
+            if (determinant(p[p1], p[p2], p[p3]) < 0)
+                return true;
+            return false;
+        }
+        private bool varf_reflex(int p)
+        {
+            int p_ant = (p > 0) ? p - 1 : n - 1;
+            int p_urm = (p < n - 1) ? p + 1 : 0;
+            return intoarcere_spre_stanga(p_ant, p, p_urm);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             if (n < 3)
@@ -48,6 +65,39 @@ namespace Partitionarea_in_poligoane_monotone
         private void button3_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            sortare_varfuri();
+            for (int i = 1; i < n; i++)
+            {
+                if (varf_reflex(i))
+                {
+                    if (cp[i - 1].Y > cp[i].Y || (cp[i - 1].Y == cp[i].Y && cp[i - 1].X < cp[i].X))
+                    {
+                        if (cp[i + 1].Y > cp[i].Y || (cp[i + 1].Y == cp[i].Y && cp[i + 1].X < cp[i].X))
+                            g.DrawLine(pen, cp[i].X, cp[i].Y, cp[i + 1].X, cp[i + 1].Y);
+                    }
+                    else if (cp[i - 1].Y < cp[i].Y || (cp[i - 1].Y == cp[i].Y && cp[i - 1].X > cp[i].X))
+                    {
+                        if (cp[i + 1].Y < cp[i].Y || (cp[i + 1].Y == cp[i].Y && cp[i + 1].X > cp[i].X))
+                            g.DrawLine(pen, cp[i].X, cp[i].Y, cp[i + 1].X, cp[i + 1].Y);
+                    }
+                }
+            }
+        }
+        private void sortare_varfuri()
+        {
+
+            for (int j = 0; j < this.Height; j++)
+            {
+                for (int i = 0; i < p.Count; i++)
+                {
+                    if (p[i].Y == j)
+                        cp.Add(p[i]);
+                }
+            }
         }
     }
 }

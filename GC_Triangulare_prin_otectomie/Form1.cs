@@ -15,6 +15,7 @@ namespace GC_Triangulare_prin_otectomie
         int cn;
         List<PointF> p = new List<PointF>(); //lista varfurilor
         List<PointF> treicolorare = new List<PointF>();
+        List<Tuple<int, int, int>> triunghiuri = new List<Tuple<int, int, int>>();
         bool poligon_inchis = false;
         bool ok = true;
 
@@ -31,7 +32,7 @@ namespace GC_Triangulare_prin_otectomie
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
-            treicolorare = p;
+            treicolorare.Add(this.PointToClient(new Point(Form1.MousePosition.X, Form1.MousePosition.Y)));
             if (ok)
             {
                 g.DrawEllipse(pen, p[n].X, p[n].Y, raza, raza);
@@ -43,6 +44,7 @@ namespace GC_Triangulare_prin_otectomie
             }
             cn = n;
         }
+
         //inchiderea poligonul
         private void button1_Click(object sender, EventArgs e)
         {
@@ -109,7 +111,6 @@ namespace GC_Triangulare_prin_otectomie
                 button1_Click(sender, e); //inchide poligonul
 
             pen = new Pen(Color.MediumVioletRed, 3);
-
             while (n > 3)
             {
                 for (int i = 0; i < n; i++)
@@ -121,6 +122,7 @@ namespace GC_Triangulare_prin_otectomie
                             double aria_triunghi = Aria(p[i], p[i + 1], p[0]);
                             aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[0]);
+                            triunghiuri.Add(new Tuple<int, int, int>(i, i + 1, 0));
                             Thread.Sleep(100);
                             p.Remove(p[i + 1]);
                             n--;
@@ -134,6 +136,7 @@ namespace GC_Triangulare_prin_otectomie
                             double aria_triunghi = Aria(p[i], p[0], p[1]);
                             aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[1]);
+                            triunghiuri.Add(new Tuple<int, int, int>(i, 0, 1));
                             Thread.Sleep(100);
                             p.Remove(p[0]);
                             n--;
@@ -147,6 +150,7 @@ namespace GC_Triangulare_prin_otectomie
                             double aria_triunghi = Aria(p[i], p[i + 1], p[i + 2]);
                             aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[i + 2]);
+                            triunghiuri.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
                             Thread.Sleep(100);
                             p.Remove(p[i + 1]);
                             n--;
@@ -201,10 +205,12 @@ namespace GC_Triangulare_prin_otectomie
             Application.Exit();
         }
 
-        
+
         private void button4_Click(object sender, EventArgs e)
         {
+            //cn = triunghiuri.Count;
             Tuple<int, int>[] colorare = new Tuple<int, int>[cn];
+
             // 0 - NULL
             // 1 - red
             // 2 - green
