@@ -12,7 +12,7 @@ namespace GC_Triangulare_prin_otectomie
         Pen pen = new Pen(Color.RoyalBlue, 3);
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
-        int cn;
+        int triunghiuricount;
         List<PointF> p = new List<PointF>(); //lista varfurilor
         List<PointF> treicolorare = new List<PointF>();
         List<Tuple<int, int, int>> triunghiuri = new List<Tuple<int, int, int>>();
@@ -42,7 +42,7 @@ namespace GC_Triangulare_prin_otectomie
                     g.DrawLine(pen, p[n - 1], p[n]);
                 n++;
             }
-            cn = n;
+            triunghiuricount = n;
         }
 
         //inchiderea poligonul
@@ -161,7 +161,6 @@ namespace GC_Triangulare_prin_otectomie
             }
             label3.Text = Convert.ToString(aria_poligon);
         }
-
         private double Aria(PointF p1, PointF p2, PointF p3)
         {
             return (double)Math.Abs(0.5F * determinant(p1, p2, p3));
@@ -204,42 +203,34 @@ namespace GC_Triangulare_prin_otectomie
         {
             Application.Exit();
         }
-
-
         private void button4_Click(object sender, EventArgs e)
         {
-            //cn = triunghiuri.Count;
-            Tuple<int, int>[] colorare = new Tuple<int, int>[cn];
+            int[] colorare = new int[triunghiuri.Count];
 
             // 0 - NULL
             // 1 - red
             // 2 - green
             // 3 - blue
 
-            for (int i = 0; i < cn; i++)
-            {
-                colorare[i] = new Tuple<int, int>(i, 0);
-            }
+            colorare[triunghiuri[triunghiuri.Count - 1].Item1] = 1;
+            colorare[triunghiuri[triunghiuri.Count - 1].Item2] = 2;
+            colorare[triunghiuri[triunghiuri.Count - 1].Item3] = 3;
+            g.DrawEllipse(r, treicolorare[triunghiuri[triunghiuri.Count - 1].Item1].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item1].Y, 20, 20);
+            g.DrawEllipse(gr, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].Y, 20, 20);
+            g.DrawEllipse(b, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].Y, 20, 20);
 
-            colorare[cn - 1] = new Tuple<int, int>(cn - 1, 1);
-            g.DrawEllipse(r, treicolorare[cn - 1].X, treicolorare[cn - 1].Y, 20, 20);
-            colorare[cn - 2] = new Tuple<int, int>(cn - 2, 2);
-            g.DrawEllipse(gr, treicolorare[cn - 2].X, treicolorare[cn - 2].Y, 20, 20);
-            colorare[cn - 3] = new Tuple<int, int>(cn - 3, 3);
-            g.DrawEllipse(b, treicolorare[cn - 3].X, treicolorare[cn - 3].Y, 20, 20);
-
-            for (int i = cn - 4; i >= 0; i--)
+            for (int i = triunghiuri.Count - 2; i >= 0; i--)
             {
-                if (colorare[i].Item2 == 0)
-                {
-                    colorare[i] = new Tuple<int, int>(i, 6 - colorare[i + 1].Item2 - colorare[i + 2].Item2);
-                    if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 1)
-                        g.DrawEllipse(r, treicolorare[i].X, treicolorare[i].Y, 20, 20);
-                    else if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 2)
-                        g.DrawEllipse(gr, treicolorare[i].X, treicolorare[i].Y, 20, 20);
-                    else if (6 - colorare[i + 1].Item2 - colorare[i + 2].Item2 == 3)
-                        g.DrawEllipse(b, treicolorare[i].X, treicolorare[i].Y, 20, 20);
-                }
+                if (colorare[triunghiuri[i].Item1] == 0)
+                    colorare[triunghiuri[i].Item1] = 6 - (colorare[triunghiuri[i].Item2] + colorare[triunghiuri[i].Item3]);
+                if (colorare[triunghiuri[i].Item2] == 0)
+                    colorare[triunghiuri[i].Item2] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item3]);
+                if (colorare[triunghiuri[i].Item3] == 0)
+                    colorare[triunghiuri[i].Item3] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item2]);
+
+                g.DrawEllipse(r, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
+                g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
+                g.DrawEllipse(b, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
             }
         }
     }

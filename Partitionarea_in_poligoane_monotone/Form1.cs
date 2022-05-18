@@ -17,7 +17,6 @@ namespace Partitionarea_in_poligoane_monotone
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
         List<PointF> p = new List<PointF>(); //lista varfurilor
-        List<PointF> cp = new List<PointF>();
         bool ok = true;
         public Form1()
         {
@@ -69,33 +68,20 @@ namespace Partitionarea_in_poligoane_monotone
 
         private void button2_Click(object sender, EventArgs e)
         {
-            sortare_varfuri();
-            for (int i = 1; i < n; i++)
+            for (int i = 1; i < n - 1; i++)
             {
                 if (varf_reflex(i))
                 {
-                    if (cp[i - 1].Y > cp[i].Y || (cp[i - 1].Y == cp[i].Y && cp[i - 1].X < cp[i].X))
+                    if (p[i - 1].Y > p[i].Y || (p[i - 1].Y == p[i].Y && p[i - 1].X < p[i].X))
                     {
-                        if (cp[i + 1].Y > cp[i].Y || (cp[i + 1].Y == cp[i].Y && cp[i + 1].X < cp[i].X))
-                            g.DrawLine(pen, cp[i].X, cp[i].Y, cp[i + 1].X, cp[i + 1].Y);
+                        if (p[i + 1].Y > p[i].Y || (p[i + 1].Y == p[i].Y && p[i + 1].X < p[i].X))
+                            g.DrawLine(pen, p[i].X, p[i].Y, p[i + 1].X, p[i + 1].Y);
                     }
-                    else if (cp[i - 1].Y < cp[i].Y || (cp[i - 1].Y == cp[i].Y && cp[i - 1].X > cp[i].X))
+                    else if (p[i - 1].Y < p[i].Y || (p[i - 1].Y == p[i].Y && p[i - 1].X > p[i].X))
                     {
-                        if (cp[i + 1].Y < cp[i].Y || (cp[i + 1].Y == cp[i].Y && cp[i + 1].X > cp[i].X))
-                            g.DrawLine(pen, cp[i].X, cp[i].Y, cp[i + 1].X, cp[i + 1].Y);
+                        if (p[i + 1].Y < p[i].Y || (p[i + 1].Y == p[i].Y && p[i + 1].X > p[i].X))
+                            g.DrawLine(pen, p[i].X, p[i].Y, p[i + 1].X, p[i + 1].Y);
                     }
-                }
-            }
-        }
-        private void sortare_varfuri()
-        {
-
-            for (int j = 0; j < this.Height; j++)
-            {
-                for (int i = 0; i < p.Count; i++)
-                {
-                    if (p[i].Y == j)
-                        cp.Add(p[i]);
                 }
             }
         }
