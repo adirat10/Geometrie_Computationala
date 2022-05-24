@@ -21,15 +21,18 @@ namespace Partitionarea_in_poligoane_monotone
         {
             InitializeComponent();
             g = CreateGraphics();
-            p1 = new Pen(Color.Green, 3);
+            p1 = new Pen(Color.BlueViolet, 3);
         }
 
         private void Form1_Click(object sender, EventArgs e)
         {
+            string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(PointToClient(new Point(MousePosition.X, MousePosition.Y)));
             if (!poligon_inchis)
             {
                 g.DrawEllipse(p1, p[n].X, p[n].Y, raza, raza);
+                g.DrawString(Convert.ToString(letters[n]), new Font(FontFamily.GenericSansSerif, 14),
+               new SolidBrush(Color.Black), p[n].X + raza, p[n].Y - raza);
                 if (n > 0)
                     g.DrawLine(p1, p[n - 1], p[n]);
                 n++;
@@ -42,28 +45,75 @@ namespace Partitionarea_in_poligoane_monotone
 
             if (n >= 3)
             {
-                for (int i = 1; i < n - 1; i++)
+                for (int i = 0; i < n; i++)
+                {
                     if (reflex(i))
                     {
-                        if (p[i - 1].Y > p[i].Y && p[i + 1].Y > p[i].Y)
+                        if (i == 0)
                         {
-                            int j;
-                            if (Primul_deasupra(i) != -1)
+                            if (p[n - 1].Y > p[i].Y && p[i + 1].Y > p[i].Y)
                             {
-                                j = Primul_deasupra(i);
-                                g.DrawLine(p1, p[i], p[j]);
+                                int j;
+                                if (Primul_deasupra(i) != -1)
+                                {
+                                    j = Primul_deasupra(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
+                            }
+                            if (p[n - 1].Y < p[i].Y && p[i + 1].Y < p[i].Y)
+                            {
+                                int j;
+                                if (Primul_dedesubt(i) != -1)
+                                {
+                                    j = Primul_dedesubt(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
                             }
                         }
-                        else if (p[i - 1].Y < p[i].Y && p[i + 1].Y < p[i].Y)
+                        else if (i == n - 1)
                         {
-                            int j;
-                            if (Primul_dedesubt(i) != -1)
+                            if (p[i - 1].Y > p[i].Y && p[0].Y > p[i].Y)
                             {
-                                j = Primul_dedesubt(i);
-                                g.DrawLine(p1, p[i], p[j]);
+                                int j;
+                                if (Primul_deasupra(i) != -1)
+                                {
+                                    j = Primul_deasupra(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
+                            }
+                            if (p[i - 1].Y < p[i].Y && p[0].Y < p[i].Y)
+                            {
+                                int j;
+                                if (Primul_dedesubt(i) != -1)
+                                {
+                                    j = Primul_dedesubt(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (p[i - 1].Y > p[i].Y && p[i + 1].Y > p[i].Y)
+                            {
+                                int j;
+                                if (Primul_deasupra(i) != -1)
+                                {
+                                    j = Primul_deasupra(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
+                            }
+                            else if (p[i - 1].Y < p[i].Y && p[i + 1].Y < p[i].Y)
+                            {
+                                int j;
+                                if (Primul_dedesubt(i) != -1)
+                                {
+                                    j = Primul_dedesubt(i);
+                                    g.DrawLine(p1, p[i], p[j]);
+                                }
                             }
                         }
                     }
+                }
             }
         }
 

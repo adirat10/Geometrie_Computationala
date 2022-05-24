@@ -155,6 +155,7 @@ namespace GC_Triangulare_prin_otectomie
                 }
             }
             label3.Text = Convert.ToString(aria_poligon);
+            triunghiuri.Add(new Tuple<int, int, int>(n - 1, n - 2, 0));
         }
         private double Aria(PointF p1, PointF p2, PointF p3)
         {
@@ -201,7 +202,7 @@ namespace GC_Triangulare_prin_otectomie
         private void button4_Click(object sender, EventArgs e)
         {
             int[] colorare = new int[triunghiuri.Count];
-            label4.Text=Convert.ToString(triunghiuri.Count);
+            label4.Text = Convert.ToString(triunghiuri.Count + " triunghiuri");
             for (int i = 0; i < triunghiuri.Count; i++)
                 colorare[i] = 0;
             // 0 - NULL
@@ -216,32 +217,32 @@ namespace GC_Triangulare_prin_otectomie
             g.DrawEllipse(gr, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].Y, 20, 20);
             g.DrawEllipse(b, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].Y, 20, 20);
 
-            for (int i = triunghiuri.Count - 2; i >= 0; i--)
+            for (int i = triunghiuri.Count - 1; i >= 0; i--)
             {
                 if (colorare[triunghiuri[i].Item1] == 0)
                 {
                     colorare[triunghiuri[i].Item1] = 6 - (colorare[triunghiuri[i].Item2] + colorare[triunghiuri[i].Item3]);
-                    if (6 - (colorare[triunghiuri[i].Item2] + colorare[triunghiuri[i].Item3]) == 1)
+                    if (colorare[triunghiuri[i].Item1] == 1)
                         g.DrawEllipse(r, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
-                    else if (6 - (colorare[triunghiuri[i].Item2] + colorare[triunghiuri[i].Item3]) == 2)
+                    else if (colorare[triunghiuri[i].Item1] == 2)
                         g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
                     else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
                 }
                 if (colorare[triunghiuri[i].Item2] == 0)
                 {
                     colorare[triunghiuri[i].Item2] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item3]);
-                    if (6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item3]) == 1)
+                    if (colorare[triunghiuri[i].Item2] == 1)
                         g.DrawEllipse(r, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
-                    else if (6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item3]) == 2)
+                    else if (colorare[triunghiuri[i].Item2] == 2)
                         g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
                     else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
                 }
                 if (colorare[triunghiuri[i].Item3] == 0)
                 {
                     colorare[triunghiuri[i].Item3] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item2]);
-                    if (6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item2]) == 1)
+                    if (colorare[triunghiuri[i].Item3] == 1)
                         g.DrawEllipse(r, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
-                    else if (6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item2]) == 2)
+                    else if (colorare[triunghiuri[i].Item3] == 2)
                         g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
                     else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
                 }

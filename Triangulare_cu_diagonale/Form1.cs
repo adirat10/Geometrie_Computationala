@@ -14,6 +14,7 @@ namespace Triangulare_cu_diagonale
         int n = 0; // nr de varfuri ale poligonului
         List<PointF> p = new List<PointF>(); //lista varfurilor
         bool poligon_inchis = false;
+
         public Form1()
         {
             InitializeComponent();
