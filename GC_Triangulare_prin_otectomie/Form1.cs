@@ -12,15 +12,13 @@ namespace GC_Triangulare_prin_otectomie
         Pen pen = new Pen(Color.RoyalBlue, 3);
         const int raza = 3;
         int n = 0; // nr de varfuri ale poligonului
-        List<PointF> p = new List<PointF>(); //lista varfurilor
-        List<PointF> treicolorare = new List<PointF>();
-        List<Tuple<int, int, int>> triunghiuri = new List<Tuple<int, int, int>>();
+        List<Point> p = new List<Point>(); //lista varfurilor
+        List<Point> treicolorare = new List<Point>();
+        List<Tuple<Point, Point, Point>> triunghiuri = new List<Tuple<Point, Point, Point>>();
         bool poligon_inchis = false;
         bool ok = true;
+        double aria_poligon = 0;
 
-        Pen r = new Pen(Color.Red, 4);
-        Pen gr = new Pen(Color.Green, 4);
-        Pen b = new Pen(Color.Blue, 4);
         public Form1()
         {
             InitializeComponent();
@@ -100,13 +98,15 @@ namespace GC_Triangulare_prin_otectomie
         }
         //triangularea poligonului prin otectomie
 
-        double aria_poligon = 0;
         private void button2_Click(object sender, EventArgs e)
         {
-            if (n <= 3)
+            if (n < 3)
                 return;
             if (!poligon_inchis)
                 button1_Click(sender, e); //inchide poligonul
+
+            if (n == 3)
+                label3.Text = Convert.ToString(Aria(p[0], p[1], p[2]));
 
             pen = new Pen(Color.MediumVioletRed, 3);
             while (n > 3)
@@ -120,7 +120,7 @@ namespace GC_Triangulare_prin_otectomie
                             double aria_triunghi = Aria(p[i], p[i + 1], p[0]);
                             aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[0]);
-                            triunghiuri.Add(new Tuple<int, int, int>(i, i + 1, 0));
+                            triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[i + 1], p[0]));
                             Thread.Sleep(100);
                             p.Remove(p[i + 1]);
                             n--;
@@ -134,7 +134,7 @@ namespace GC_Triangulare_prin_otectomie
                             double aria_triunghi = Aria(p[i], p[0], p[1]);
                             aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[1]);
-                            triunghiuri.Add(new Tuple<int, int, int>(i, 0, 1));
+                            triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[0], p[1]));
                             Thread.Sleep(100);
                             p.Remove(p[0]);
                             n--;
@@ -146,7 +146,7 @@ namespace GC_Triangulare_prin_otectomie
                         double aria_triunghi = Aria(p[i], p[i + 1], p[i + 2]);
                         aria_poligon += aria_triunghi;
                         g.DrawLine(pen, p[i], p[i + 2]);
-                        triunghiuri.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
+                        triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[i + 1], p[i + 2]));
                         Thread.Sleep(100);
                         p.Remove(p[i + 1]);
                         n--;
@@ -154,8 +154,10 @@ namespace GC_Triangulare_prin_otectomie
                     }
                 }
             }
-            label3.Text = Convert.ToString(aria_poligon);
-            triunghiuri.Add(new Tuple<int, int, int>(n - 1, n - 2, 0));
+            if (n > 3)
+                label3.Text = Convert.ToString(aria_poligon);
+            triunghiuri.Add(new Tuple<Point, Point, Point>(p[n - 1], p[n - 2], p[0]));
+            label4.Text = Convert.ToString(triunghiuri.Count + " triunghiuri");
         }
         private double Aria(PointF p1, PointF p2, PointF p3)
         {
@@ -201,55 +203,57 @@ namespace GC_Triangulare_prin_otectomie
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            int[] colorare = new int[triunghiuri.Count];
-            label4.Text = Convert.ToString(triunghiuri.Count + " triunghiuri");
-            for (int i = 0; i < triunghiuri.Count; i++)
-                colorare[i] = 0;
-            // 0 - NULL
-            // 1 - red
-            // 2 - green
-            // 3 - blue
-
-            colorare[triunghiuri[triunghiuri.Count - 1].Item1] = 1;
-            colorare[triunghiuri[triunghiuri.Count - 1].Item2] = 2;
-            colorare[triunghiuri[triunghiuri.Count - 1].Item3] = 3;
-            g.DrawEllipse(r, treicolorare[triunghiuri[triunghiuri.Count - 1].Item1].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item1].Y, 20, 20);
-            g.DrawEllipse(gr, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item2].Y, 20, 20);
-            g.DrawEllipse(b, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].X, treicolorare[triunghiuri[triunghiuri.Count - 1].Item3].Y, 20, 20);
+            Pen[] pens = new Pen[] { new Pen(Color.Red, 4), new Pen(Color.Green, 4), new Pen(Color.Blue, 4) };
+            List<Tuple<Point, int>> varfuriMarcate = new List<Tuple<Point, int>>();
 
             for (int i = triunghiuri.Count - 1; i >= 0; i--)
             {
-                if (colorare[triunghiuri[i].Item1] == 0)
+                int colorat1 = EsteMarcat(triunghiuri[i].Item1, varfuriMarcate);
+                int colorat2 = EsteMarcat(triunghiuri[i].Item2, varfuriMarcate);
+                int colorat3 = EsteMarcat(triunghiuri[i].Item3, varfuriMarcate);
+
+                if (colorat1 == -1 && colorat2 == -1 && colorat3 == -1)
                 {
-                    colorare[triunghiuri[i].Item1] = 6 - (colorare[triunghiuri[i].Item2] + colorare[triunghiuri[i].Item3]);
-                    if (colorare[triunghiuri[i].Item1] == 1)
-                        g.DrawEllipse(r, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
-                    else if (colorare[triunghiuri[i].Item1] == 2)
-                        g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
-                    else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item1, 0));
+                    g.DrawEllipse(pens[0], triunghiuri[i].Item1.X, triunghiuri[i].Item1.Y, 20, 20);
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item2, 1));
+                    g.DrawEllipse(pens[1], triunghiuri[i].Item2.X, triunghiuri[i].Item2.Y, 20, 20);
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item3, 2));
+                    g.DrawEllipse(pens[2], triunghiuri[i].Item3.X, triunghiuri[i].Item3.Y, 20, 20);
                 }
-                if (colorare[triunghiuri[i].Item2] == 0)
+                else if (colorat1 == -1)
                 {
-                    colorare[triunghiuri[i].Item2] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item3]);
-                    if (colorare[triunghiuri[i].Item2] == 1)
-                        g.DrawEllipse(r, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
-                    else if (colorare[triunghiuri[i].Item2] == 2)
-                        g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
-                    else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item1, CuloareLipsa(colorat2, colorat3)));
+                    g.DrawEllipse(pens[CuloareLipsa(colorat2, colorat3)], triunghiuri[i].Item1.X, triunghiuri[i].Item1.Y, 20, 20);
                 }
-                if (colorare[triunghiuri[i].Item3] == 0)
+                else if (colorat2 == -1)
                 {
-                    colorare[triunghiuri[i].Item3] = 6 - (colorare[triunghiuri[i].Item1] + colorare[triunghiuri[i].Item2]);
-                    if (colorare[triunghiuri[i].Item3] == 1)
-                        g.DrawEllipse(r, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
-                    else if (colorare[triunghiuri[i].Item3] == 2)
-                        g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
-                    else g.DrawEllipse(b, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item2, CuloareLipsa(colorat1, colorat3)));
+                    g.DrawEllipse(pens[CuloareLipsa(colorat1, colorat3)], triunghiuri[i].Item2.X, triunghiuri[i].Item2.Y, 20, 20);
                 }
-                //g.DrawEllipse(r, treicolorare[triunghiuri[i].Item1].X, treicolorare[triunghiuri[i].Item1].Y, 20, 20);
-                //g.DrawEllipse(gr, treicolorare[triunghiuri[i].Item2].X, treicolorare[triunghiuri[i].Item2].Y, 20, 20);
-                //g.DrawEllipse(b, treicolorare[triunghiuri[i].Item3].X, treicolorare[triunghiuri[i].Item3].Y, 20, 20);
+                else if (colorat3 == -1)
+                {
+                    varfuriMarcate.Add(new Tuple<Point, int>(triunghiuri[i].Item3, CuloareLipsa(colorat1, colorat2)));
+                    g.DrawEllipse(pens[CuloareLipsa(colorat1, colorat2)], triunghiuri[i].Item3.X, triunghiuri[i].Item3.Y, 20, 20);
+                }
             }
+        }
+        private int EsteMarcat(Point punct, List<Tuple<Point, int>> varfuriMarcate)
+        {
+            for (int i = 0; i < varfuriMarcate.Count; i++)
+                if (varfuriMarcate[i].Item1 == punct)
+                    return varfuriMarcate[i].Item2;
+            return -1;
+        }
+        private int CuloareLipsa(int a, int b)
+        {
+            if ((a == 0 && b == 1) || (a == 1 && b == 0))
+                return 2;
+            if ((a == 0 && b == 2) || (a == 2 && b == 0))
+                return 1;
+            if ((a == 1 && b == 2) || (a == 2 && b == 1))
+                return 0;
+            return -1;
         }
     }
 }
