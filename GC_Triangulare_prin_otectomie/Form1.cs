@@ -100,12 +100,13 @@ namespace GC_Triangulare_prin_otectomie
 
         private void button2_Click(object sender, EventArgs e)
         {
+            int cn = n;
             if (n < 3)
                 return;
             if (!poligon_inchis)
                 button1_Click(sender, e); //inchide poligonul
 
-            if (n == 3)
+            if (cn == 3)
                 label3.Text = Convert.ToString(Aria(p[0], p[1], p[2]));
 
             pen = new Pen(Color.MediumVioletRed, 3);
@@ -154,7 +155,7 @@ namespace GC_Triangulare_prin_otectomie
                     }
                 }
             }
-            if (n > 3)
+            if (cn > 3)
                 label3.Text = Convert.ToString(aria_poligon);
             triunghiuri.Add(new Tuple<Point, Point, Point>(p[n - 1], p[n - 2], p[0]));
             label4.Text = Convert.ToString(triunghiuri.Count + " triunghiuri");

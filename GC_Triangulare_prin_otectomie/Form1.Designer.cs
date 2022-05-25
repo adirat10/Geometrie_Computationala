@@ -54,7 +54,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(459, 396);
+            this.button1.Location = new System.Drawing.Point(350, 396);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(143, 42);
             this.button1.TabIndex = 4;
@@ -66,7 +66,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(608, 396);
+            this.button2.Location = new System.Drawing.Point(490, 396);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(174, 42);
             this.button2.TabIndex = 5;
@@ -88,7 +88,7 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(183, 403);
+            this.label2.Location = new System.Drawing.Point(166, 403);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 33);
             this.label2.TabIndex = 7;
@@ -97,7 +97,7 @@
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(250, 403);
+            this.label3.Location = new System.Drawing.Point(234, 403);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(83, 33);
             this.label3.TabIndex = 8;
@@ -107,7 +107,7 @@
             // 
             this.button4.BackColor = System.Drawing.Color.Turquoise;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(608, 348);
+            this.button4.Location = new System.Drawing.Point(664, 396);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(174, 42);
             this.button4.TabIndex = 9;
@@ -138,7 +138,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button3);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Otectomie";
             this.Click += new System.EventHandler(this.Form1_Click);
             this.ResumeLayout(false);
             this.PerformLayout();
