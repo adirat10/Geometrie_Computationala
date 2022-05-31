@@ -13,6 +13,7 @@ namespace Triangularea_unui_poligon_monoton
         int n = 0;
         List<Point> p = new List<Point>();
         bool poligon_inchis = false;
+        Pen pen = new Pen(Color.Black, 3);
 
         public Form1()
         {
@@ -20,7 +21,6 @@ namespace Triangularea_unui_poligon_monoton
             g = CreateGraphics();
             p1 = new Pen(Color.BlueViolet, 3);
         }
-
         private void Form1_Click(object sender, EventArgs e)
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -225,10 +225,37 @@ namespace Triangularea_unui_poligon_monoton
         {
             Application.Exit();
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
+            Stack<Point> s = new Stack<Point>();
+            s.Push(p[0]);
+            s.Push(p[1]);
 
+            for (int j = 3; j < n - 1; j++)
+            {
+                if (lanturi_diferite(p[j], s.Peek()))
+                {
+                    s.Clear();
+                    g.DrawLine(pen, p[j], s.Peek());
+                    s.Push(p[j - 1]);
+                    s.Push(p[j]);
+                }
+                else
+                {
+                    s.Pop();
+                    for (int i = 0; i < s.Count; i++)
+                        if (isdiagonala(i, j))
+                            s.Pop();
+                    s.Push(p[j]);
+                }
+            }
+        }
+
+        private bool lanturi_diferite(Point point1, Point point2)
+        {
+            if (point1.Y < point2.Y)
+                return true;
+            return false;
         }
     }
 }

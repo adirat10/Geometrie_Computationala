@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace GC_Triangulare_prin_otectomie
+namespace Partitionarea_convexa
 {
     public partial class Form1 : Form
     {
@@ -17,8 +17,7 @@ namespace GC_Triangulare_prin_otectomie
         List<Tuple<Point, Point, Point>> triunghiuri = new List<Tuple<Point, Point, Point>>();
         bool poligon_inchis = false;
         bool ok = true;
-        double aria_poligon = 0;
-
+        int cn;
         public Form1()
         {
             InitializeComponent();
@@ -39,8 +38,8 @@ namespace GC_Triangulare_prin_otectomie
                     g.DrawLine(pen, p[n - 1], p[n]);
                 n++;
             }
+            cn = n;
         }
-
         //inchiderea poligonul
         private void button1_Click(object sender, EventArgs e)
         {
@@ -97,17 +96,12 @@ namespace GC_Triangulare_prin_otectomie
             return false;
         }
         //triangularea poligonului prin otectomie
-
         private void button2_Click(object sender, EventArgs e)
         {
-            int cn = n;
             if (n < 3)
                 return;
             if (!poligon_inchis)
                 button1_Click(sender, e); //inchide poligonul
-
-            if (cn == 3)
-                label3.Text = Convert.ToString(Aria(p[0], p[1], p[2]));
 
             pen = new Pen(Color.MediumVioletRed, 3);
             while (n > 3)
@@ -118,8 +112,6 @@ namespace GC_Triangulare_prin_otectomie
                     {
                         if (isdiagonala(i, 0))
                         {
-                            double aria_triunghi = Aria(p[i], p[i + 1], p[0]);
-                            aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[0]);
                             triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[i + 1], p[0]));
                             Thread.Sleep(100);
@@ -132,8 +124,6 @@ namespace GC_Triangulare_prin_otectomie
                     {
                         if (isdiagonala(i, 1))
                         {
-                            double aria_triunghi = Aria(p[i], p[0], p[1]);
-                            aria_poligon += aria_triunghi;
                             g.DrawLine(pen, p[i], p[1]);
                             triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[0], p[1]));
                             Thread.Sleep(100);
@@ -144,8 +134,6 @@ namespace GC_Triangulare_prin_otectomie
                     }
                     else if (isdiagonala(i, i + 2))
                     {
-                        double aria_triunghi = Aria(p[i], p[i + 1], p[i + 2]);
-                        aria_poligon += aria_triunghi;
                         g.DrawLine(pen, p[i], p[i + 2]);
                         triunghiuri.Add(new Tuple<Point, Point, Point>(p[i], p[i + 1], p[i + 2]));
                         Thread.Sleep(100);
@@ -155,10 +143,7 @@ namespace GC_Triangulare_prin_otectomie
                     }
                 }
             }
-            if (cn > 3)
-                label3.Text = Convert.ToString(aria_poligon);
             triunghiuri.Add(new Tuple<Point, Point, Point>(p[n - 1], p[n - 2], p[0]));
-            label4.Text = Convert.ToString(triunghiuri.Count + " triunghiuri");
         }
         private double Aria(PointF p1, PointF p2, PointF p3)
         {
@@ -202,7 +187,6 @@ namespace GC_Triangulare_prin_otectomie
         {
             Application.Exit();
         }
-
         // 3-colorarea
         private void button4_Click(object sender, EventArgs e)
         {
@@ -257,6 +241,34 @@ namespace GC_Triangulare_prin_otectomie
             if ((a == 1 && b == 2) || (a == 2 && b == 1))
                 return 0;
             return -1;
+        }
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            Pen p1 = new Pen(Color.Black, 3);
+            for (int i = 0; i < cn; i++)
+            {
+                if (i == cn - 2)
+                {
+                    if (isdiagonala(i, 0) && !esentiala(i, 0))
+                        g.DrawLine(p1, p[i], p[0]);
+                }
+                else if (i == cn - 1)
+                {
+                    if (isdiagonala(i, 1) && !esentiala(i, 1))
+                        g.DrawLine(p1, p[i], p[1]);
+                }
+                else if (isdiagonala(i, i + 2) && !esentiala(i, i + 2))
+                    g.DrawLine(p1, p[i], p[i + 2]);
+            }
+        }
+        private bool esentiala(int i, int j)
+        {
+            p.Remove(p[i]);
+            p.Remove(p[j]);
+            for (int k = 0; k < cn; k++)
+                if (varf_reflex(k))
+                    return true;
+            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Triangularea_unui_poligon_monoton
+﻿namespace Partitionarea_convexa
 {
     partial class Form1
     {
@@ -37,25 +37,25 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.Bisque;
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(714, 473);
+            this.button1.Location = new System.Drawing.Point(260, 396);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(173, 42);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Partitionare";
+            this.button1.Size = new System.Drawing.Size(143, 42);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Done";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(377, 473);
+            this.button2.Location = new System.Drawing.Point(409, 396);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(145, 42);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "Done";
+            this.button2.Size = new System.Drawing.Size(170, 42);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Triangulare";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -63,10 +63,10 @@
             // 
             this.button3.BackColor = System.Drawing.Color.Red;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(12, 473);
+            this.button3.Location = new System.Drawing.Point(12, 396);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(124, 42);
-            this.button3.TabIndex = 9;
+            this.button3.TabIndex = 3;
             this.button3.Text = "EXIT";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -76,36 +76,36 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(149, 33);
+            this.label1.Location = new System.Drawing.Point(116, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(585, 29);
-            this.label1.TabIndex = 10;
+            this.label1.TabIndex = 4;
             this.label1.Text = "Desenați punctele în ordine invers trigonometrică";
             // 
             // button4
             // 
-            this.button4.BackColor = System.Drawing.Color.Aquamarine;
+            this.button4.BackColor = System.Drawing.Color.Cyan;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(535, 473);
+            this.button4.Location = new System.Drawing.Point(595, 364);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(173, 42);
-            this.button4.TabIndex = 11;
-            this.button4.Text = "Triangulare";
+            this.button4.Size = new System.Drawing.Size(193, 74);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Partitionare convexa";
             this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(899, 527);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Triangulare";
+            this.Text = "Form1";
             this.Click += new System.EventHandler(this.Form1_Click);
             this.ResumeLayout(false);
             this.PerformLayout();
