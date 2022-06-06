@@ -12,6 +12,7 @@ namespace Triangularea_unui_poligon_monoton
         const int raza = 2;
         int n = 0;
         List<Point> p = new List<Point>();
+        List<Point> puncte = new List<Point>();
         bool poligon_inchis = false;
         Pen pen = new Pen(Color.Black, 3);
 
@@ -25,6 +26,7 @@ namespace Triangularea_unui_poligon_monoton
         {
             string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             p.Add(PointToClient(new Point(MousePosition.X, MousePosition.Y)));
+            puncte.Add(PointToClient(new Point(MousePosition.X, MousePosition.Y)));
             if (!poligon_inchis)
             {
                 g.DrawEllipse(p1, p[n].X, p[n].Y, raza, raza);
@@ -225,37 +227,60 @@ namespace Triangularea_unui_poligon_monoton
         {
             Application.Exit();
         }
+        int ylinie;
         private void button4_Click(object sender, EventArgs e)
         {
-            Stack<Point> s = new Stack<Point>();
-            s.Push(p[0]);
-            s.Push(p[1]);
-
-            for (int j = 3; j < n - 1; j++)
+            int ymax = -10000, ymin = 100000;
+            for (int i = 0; i < n; i++)
             {
-                if (lanturi_diferite(p[j], s.Peek()))
+                if (puncte[i].Y > ymax)
+                    ymax = puncte[i].Y;
+                if (puncte[i].Y < ymin)
+                    ymin = puncte[i].Y;
+            }
+            ylinie = (ymax + ymin) / 2;
+            g.DrawLine(pen, 0, ylinie, this.Width, ylinie);
+
+            Point ultimul_varf_sters = puncte[0];
+
+            List<Point> s = new List<Point>();
+            s.Add(puncte[0]);
+            s.Add(puncte[1]);
+
+            for (int j = 2; j < n - 2; j++)
+            {
+                if (lanturi_diferite(puncte[j], puncte[s.Count - 1]))
                 {
+                    for (int k = 1; k < s.Count; k++)
+                        g.DrawLine(pen, puncte[j], puncte[k]);
                     s.Clear();
-                    g.DrawLine(pen, p[j], s.Peek());
-                    s.Push(p[j - 1]);
-                    s.Push(p[j]);
+                    s.Add(puncte[j - 1]);
+                    s.Add(puncte[j]);
                 }
                 else
                 {
-                    s.Pop();
+                    s.Remove(puncte[s.Count - 1]);
                     for (int i = 0; i < s.Count; i++)
+                    {
                         if (isdiagonala(i, j))
-                            s.Pop();
-                    s.Push(p[j]);
+                        {
+                            s.Remove(puncte[i]);
+                            ultimul_varf_sters = puncte[i];
+                            g.DrawLine(pen, puncte[i], puncte[j]);
+                        } 
+                    }
+                    s.Add(ultimul_varf_sters);
+                    s.Add(puncte[j]);
                 }
             }
+
         }
 
         private bool lanturi_diferite(Point point1, Point point2)
         {
-            if (point1.Y < point2.Y)
-                return true;
-            return false;
+            if ((point1.Y <= ylinie && point2.Y <= ylinie) || (point1.Y > ylinie && point2.Y > ylinie))
+                return false;
+            return true;
         }
     }
 }

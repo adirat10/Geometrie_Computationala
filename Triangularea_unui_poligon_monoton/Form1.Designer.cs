@@ -39,7 +39,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.Bisque;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(714, 473);
+            this.button1.Location = new System.Drawing.Point(530, 473);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(173, 42);
             this.button1.TabIndex = 6;
@@ -86,7 +86,7 @@
             // 
             this.button4.BackColor = System.Drawing.Color.Aquamarine;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(535, 473);
+            this.button4.Location = new System.Drawing.Point(714, 473);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(173, 42);
             this.button4.TabIndex = 11;
